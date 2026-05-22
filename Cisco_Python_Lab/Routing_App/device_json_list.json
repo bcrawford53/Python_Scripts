@@ -1,0 +1,2 @@
+[{"hostname": "Rtr-1", "device_type":"cisco-ios", "hostIPaddress": "1.1.1.1", "network2adv": ["10.10.10.0/24","192.168.99.0/24"],
+"username": "cisco", "password": "cisco", "routerID": "1.1.1.1", "protocol": "ospf", "enable_pwd":"cisco"}]
