@@ -17,7 +17,7 @@ with open(user_input) as file:
       json_file = file.read()
       json_obj = json.loads(json_file)
 
-
+hostnames = []
 #Iterate through json file that each router is an element in the list
 for device in range(len(json_obj)):
     dev_type = json_obj[device]['device_type']
@@ -26,9 +26,10 @@ for device in range(len(json_obj)):
     pwd = json_obj[device]['password']
     enable_pwd = json_obj[device]['enable_pwd']
     command_list = json_obj[device]['commands']
+    host = json_obj[device]['hostname']
+    hostnames.append(host)
 
     #Need a function or commands to iterate through list and generate a command list????
-
     device_dict = {"device_type": {dev_type},
             "host": {dev_IP},
             "username": {usr},
