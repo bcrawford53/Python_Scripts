@@ -17,6 +17,8 @@ with open(user_input) as file:
       json_file = file.read()
       json_obj = json.loads(json_file)
 
+#Create an empty dictionary and list to populate with device information
+routers = {}
 hostnames = []
 #Iterate through json file that each router is an element in the list
 for device in range(len(json_obj)):
@@ -26,8 +28,8 @@ for device in range(len(json_obj)):
     pwd = json_obj[device]['password']
     enable_pwd = json_obj[device]['enable_pwd']
     command_list = json_obj[device]['commands']
-    host = json_obj[device]['hostname']
-    hostnames.append(host)
+    hostname = json_obj[device]['hostname']
+    hostnames.append(hostname)
 
     #Need a function or commands to iterate through list and generate a command list????
     device_dict = {"device_type": {dev_type},
@@ -36,6 +38,11 @@ for device in range(len(json_obj)):
             "password": {pwd},
             "secret": {enable_pwd}
     }
+
+    #Add device info needed to router list dictionary object to later use for post checks
+    routers[hostname] = device_dict
+    
+    #Start connection to network Device
     sess_obj = Connect_to_Device(device_dict)
     print(f"*"*10,"Connected to {devIP}","*"*10)
 
