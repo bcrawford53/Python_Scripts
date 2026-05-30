@@ -1,4 +1,5 @@
 from netmiko import ConnectHandler
+import os
 
 #Login information Its better to hide credentials in environment and pull into the program
 USR = "cisco"
@@ -42,11 +43,19 @@ CPE_1 = Router(host=device_list[0])
 # Connect to device
 sess = CPE_1.connect_to_device()
 
-#Commands that will be entered into device
-command_list = ['conf t','interface g0/0', 'description Link to ISP Edge','ip address 192.168.0.2 255.255.255.0',
-                'interface loop 15','description Tunnel Source', 'ip address 165.15.15.1 255.255.255.255',
-                'exit','router bgp 65000', 'neighbor 192.168.0.1 remote-as 1000','address-family ipv4',
-                'neighbor 192.168.0.1 activate', 'network 165.15.15.1 mask 255.255.255.255']
+#Commands that will be entered into device are held in text files
+list_of_commands = ['ce-1-wan-config.txt', 'ce-2-wan-config.txt', 'ce-3-wan-config.txt']
+#Iterate through list to grab the commands to send
+for file in list_of_commands:
+    command_list = []
+    with open(rf'/home/crawford/Automation/Python_Scripts/GETVPN_WAN_Netmiko_Script/{file}','r') as fh:
+        file_list = fh.readlines()
+    for command in file_list:
+        if '---Config for' in command:
+            continue
+        else:
+            command_list.append(command.strip())
+    #Send
 
 # Send show command
 output = CPE_1.send_config_commands(sess, command_list)

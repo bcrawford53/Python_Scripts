@@ -1,0 +1,15 @@
+---Config for CE-WAN-1---
+configure terminal
+interface g0/0
+description Link to ISP Edge
+ip address 192.168.0.2 255.255.255.0
+exit
+interface loopback 15
+description Tunnel Source
+ip address 165.15.15.1 255.255.255.255
+exit
+router bgp 65000
+neighbor 192.168.0.1 remote-as 1000
+address-family ipv4
+neighbor 192.168.0.1 activate
+network 165.15.15.1 mask 255.255.255.255
