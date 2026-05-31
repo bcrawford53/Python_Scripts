@@ -1,0 +1,199 @@
+CE-WAN-3#show running-config  
+Building configuration...
+
+  
+  
+Current configuration : 5148 bytes
+!
+! Last configuration change at 20:23:58 UTC Sun May 31 2026 by cisco
+!
+version 15.9
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname CE-WAN-3
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!         
+!
+!
+!
+aaa session-id common
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain name whatever.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+crypto pki trustpoint TP-self-signed-4294967295
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4294967295
+ revocation-check none
+ rsakeypair TP-self-signed-4294967295
+!
+!
+crypto pki certificate chain TP-self-signed-4294967295
+ certificate self-signed 01
+  3082022B 30820194 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 34323934 39363732 3935301E 170D3236 30353235 32313238 
+  30375A17 0D333030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D34 32393439 
+  36373239 3530819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  8100AE70 8E027F96 5712F7B6 EF6C3708 9E946F45 400EDA77 13D8E054 45317251 
+  6A357CEE D8881B1E 30712CF7 FAC01F24 BB8E81B7 FF5748BA 3AB64B53 230F647A 
+  0DCE86B9 6C91DE92 9ECE3C2D A9C17D5C 949F4D9B BECBAFCF 8C0A90D3 DF621A0B 
+  604BB466 EA7A80E2 3054AFF2 E5AA41A7 0AFA5798 2666AC87 8058A7C3 D1ED69CB 
+  30530203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 301F0603 
+  551D2304 18301680 145BD4BF EEFD2584 CBF54043 D2D452FB D49E5D6C 67301D06 
+  03551D0E 04160414 5BD4BFEE FD2584CB F54043D2 D452FBD4 9E5D6C67 300D0609 
+  2A864886 F70D0101 05050003 81810050 8FD467A4 9DBC6907 50CB24C0 82E844EE 
+  947AB45B 61E7D64D 875D8408 D125B925 AF794876 71AC38C7 1AB6CD15 7A1D3D64 
+  E11820AA 34F9C65B E5E16163 C0B014BF 57D1918D 5CFCC05A 0A29B548 9625F40F 
+  E98DF619 1D485BEB 9A2F5E34 17F2A0FA 6D5BD5B4 5E3A70F4 926F07C5 66184A5A 
+  ECEFD7C5 62843E64 9BB48375 8AE547
+        quit
+username cisco privilege 15 secret 9 $9$OQ2t7ImkLfaWXP$MC4pcnU.lxKNrCet/3ZP3W0zH2ee98IJXWP8/uzKO0s
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!         
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback254
+ description MGMT
+ ip address 192.168.254.3 255.255.255.255
+!
+interface GigabitEthernet0/0
+ description Link to ISP Edge
+ ip address 192.168.2.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 65000
+ bgp log-neighbor-changes
+ neighbor 192.168.2.1 remote-as 1000
+ !
+ address-family ipv4
+  network 192.168.254.3 mask 255.255.255.255
+  neighbor 192.168.2.1 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+ip http server
+ip http secure-server
+!
+ipv6 ioam timestamp
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ logging synchronous
+ transport input ssh
+!
+no scheduler allocate
+!
+end
+
+CE-WAN-3#

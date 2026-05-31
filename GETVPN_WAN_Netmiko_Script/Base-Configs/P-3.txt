@@ -1,0 +1,197 @@
+P-3#show running-config 
+Building configuration...
+
+  
+  
+Current configuration : 5144 bytes
+!
+version 15.9
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname P-3
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain name whatever.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+mpls label range 300 400
+mpls label protocol ldp
+!
+!
+!
+crypto pki trustpoint TP-self-signed-4294967295
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4294967295
+ revocation-check none
+ rsakeypair TP-self-signed-4294967295
+!
+!
+crypto pki certificate chain TP-self-signed-4294967295
+ certificate self-signed 01
+  3082022B 30820194 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 34323934 39363732 3935301E 170D3236 30353235 31393538 
+  31335A17 0D333030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D34 32393439 
+  36373239 3530819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  81009975 010FFDAA A13D3894 228BE2F9 EC3532A9 1671ADB5 55C912A8 590D07EE 
+  D2FF79DD 92B5F83E 09798209 7CF69457 4F2EE259 3CB3BC77 43407A4F CCCA44E6 
+  18245A42 A6C70FEF CB6BAC68 585BB6AF 5C8B86E5 837A08A6 9DFA9BFC CCD1A36D 
+  9BE5E161 5759026A B2AB92F5 976D386B 848FA9C8 8EE9A492 31D94E3A 469CCEB2 
+  BFDF0203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 301F0603 
+  551D2304 18301680 14D5B5A0 DFE9C18A 0406B21C FD65F6BD 79EC8DC9 6A301D06 
+  03551D0E 04160414 D5B5A0DF E9C18A04 06B21CFD 65F6BD79 EC8DC96A 300D0609 
+  2A864886 F70D0101 05050003 81810049 C334E5B4 A3EC44B0 9D7010C8 44C469A2 
+  EB71464B A15D2F21 069C1809 1DA77FD8 D958266D 2ED3040A 204AA09D 3E4A3BE2 
+  1668ED24 8FA0E3F5 41DBBC1D B4B10398 52738FAA 75D222F4 629CF72A 102DEAE8 
+  F341CB67 02C14EEA A48BC88A 51AE769E 4AB65B6B B78ECBFF DB815B6E BC00F8EF 
+  34D2B7AF 2DEF2106 32534C41 2040DC
+        quit
+username cisco privilege 15 secret 9 $9$RmdpVU0T1.dwFf$UDLQHVf356eFkoIP2MMOxnMlioly/zB.RrU4TqxH1iE
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback100
+ ip address 10.255.255.103 255.255.255.255
+!
+interface GigabitEthernet0/0
+ description Uplink to PE-2
+ ip address 172.16.30.37 255.255.255.252
+ duplex auto
+ speed auto
+ media-type rj45
+ mpls ip
+!
+interface GigabitEthernet0/1
+ description Internet Link
+ ip address 172.16.30.14 255.255.255.252
+ duplex auto
+ speed auto
+ media-type rj45
+ mpls ip
+!
+interface GigabitEthernet0/2
+ description Uplink to P-2
+ ip address 172.16.30.18 255.255.255.252
+ duplex auto
+ speed auto
+ media-type rj45
+ mpls ip
+!
+interface GigabitEthernet0/3
+ description Uplink to P-4
+ ip address 172.16.30.29 255.255.255.252
+ duplex auto
+ speed auto
+ media-type rj45
+ mpls ip
+!
+router ospf 30
+ network 10.255.255.103 0.0.0.0 area 0
+ network 172.16.30.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+!
+!
+ip http server
+ip http secure-server
+!
+ipv6 ioam timestamp
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ logging synchronous
+ transport input ssh
+!
+no scheduler allocate
+!
+end
+
+P-3#

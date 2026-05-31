@@ -1,0 +1,230 @@
+PE-2#show running-config 
+Building configuration...
+
+  
+  
+Current configuration : 6068 bytes
+!
+! Last configuration change at 20:21:58 UTC Sun May 31 2026 by cisco
+!
+version 15.9
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname PE-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition CUST
+ rd 1002:100
+ !
+ address-family ipv4
+  route-target export 1000:100
+  route-target import 1000:100
+ exit-address-family
+!         
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!         
+!
+!
+!
+!
+!
+!
+!
+ip domain name whatever.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+mpls label range 100 200
+mpls label protocol ldp
+!
+!
+!
+crypto pki trustpoint TP-self-signed-4294967295
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4294967295
+ revocation-check none
+ rsakeypair TP-self-signed-4294967295
+!         
+!
+crypto pki certificate chain TP-self-signed-4294967295
+ certificate self-signed 01
+  3082022B 30820194 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 34323934 39363732 3935301E 170D3236 30353235 32303333 
+  32365A17 0D333030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D34 32393439 
+  36373239 3530819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  8100CA06 8ED38CF9 F655607F A4058637 5E1D7670 0EFC285A BEC347E7 9C596E59 
+  3F8A644C 85F84682 BA9BDD58 2D6D20FA BCB1C449 27A32B79 702520D6 2FE8CA4C 
+  F061CA0A 2F13AF94 710EE588 8CF85802 79DEC6A8 503ED4F8 83EEE049 00DB3745 
+  8A2E102A 024B261F 855D4819 3B67601B 187E0EF3 B9902D8F EFD21E6F E902D8EB 
+  0BEF0203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 301F0603 
+  551D2304 18301680 1485D5FB B0B0A858 B61408A5 F37AE6B2 9E334A05 2A301D06 
+  03551D0E 04160414 85D5FBB0 B0A858B6 1408A5F3 7AE6B29E 334A052A 300D0609 
+  2A864886 F70D0101 05050003 8181009F C8D8915C 8A954EE2 E7936829 E9D623CE 
+  E1B3E3E3 8744133C 79269EF3 ADE1353D DD0BD5CB AAA275B3 3FAC3011 92B6015D 
+  9D350B9B DE1E5F2F C3F9E6E3 40B93B64 3ADF76F8 3C2FBD8B EC113E71 95CCCFE9 
+  80708496 F4ECDEAD 6C005D58 5F5B6B63 5AE0E614 3FA96778 D2D93E6A D528B381 
+  3575FBA1 DCC73A41 5BB97538 A53F1C
+        quit
+username cisco privilege 15 secret 9 $9$Q9p./1dGtBT07v$YFkQWYSRKRewonMZpnznVZoHzk7cnF4RVbwATwZ6BxA
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback100
+ ip address 10.255.255.106 255.255.255.255
+!
+interface GigabitEthernet0/0
+ description Uplink to P-3
+ ip address 172.16.30.38 255.255.255.252
+ duplex auto
+ speed auto
+ media-type rj45
+ mpls label protocol ldp
+ mpls ip
+!
+interface GigabitEthernet0/1
+ description Uplink to CE WAN
+ vrf forwarding CUST
+ ip address 192.168.1.1 255.255.255.252
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router ospf 30
+ network 10.255.255.106 0.0.0.0 area 0
+ network 172.16.30.0 0.0.0.255 area 0
+!
+router bgp 1000
+ bgp log-neighbor-changes
+ neighbor 10.255.255.100 remote-as 1000
+ neighbor 10.255.255.100 update-source Loopback100
+ neighbor 10.255.255.105 remote-as 1000
+ neighbor 10.255.255.105 update-source Loopback100
+ neighbor 10.255.255.107 remote-as 1000
+ neighbor 10.255.255.107 update-source Loopback100
+ !
+ address-family vpnv4
+  neighbor 10.255.255.100 activate
+  neighbor 10.255.255.100 send-community both
+  neighbor 10.255.255.105 activate
+  neighbor 10.255.255.105 send-community both
+  neighbor 10.255.255.107 activate
+  neighbor 10.255.255.107 send-community both
+ exit-address-family
+ !
+ address-family ipv4 vrf CUST
+  neighbor 192.168.1.2 remote-as 65000
+  neighbor 192.168.1.2 activate
+  neighbor 192.168.1.2 remove-private-as all
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+ip http server
+ip http secure-server
+!
+ipv6 ioam timestamp
+!
+!
+!
+!
+!         
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ logging synchronous
+ transport input ssh
+!
+no scheduler allocate
+!
+end
+
+PE-2# 
