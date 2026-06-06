@@ -1,0 +1,19 @@
+---
+ip_address:
+  interface: GigabitEthernet0/1
+  address: 10.200.1.2
+  mask: 255.255.255.0
+
+vrf:
+  name: LAN_DATA
+  rd: 65000:200
+  rt_import: 65000:100
+  rt_export: 65000:100
+
+bgp:
+  as_number: 65000
+  vrf: LAN_DATA
+  neighbors:
+    - ip: 10.200.1.2
+      remote_as: 64999
+      
