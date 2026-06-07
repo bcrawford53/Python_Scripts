@@ -1,8 +1,17 @@
 ---
+host: 192.168.254.1
 ip_address:
-  interface: GigabitEthernet0/1
-  address: 10.200.1.2
-  mask: 255.255.255.0
+  interfaces: 
+    - interface: GigabitEthernet0/1
+      description: LAN Interface
+      address: 10.200.1.2
+      mask: 255.255.255.0
+      vrf: LAN_DATA
+    - interface: Loopback30
+      description: Tunnel Source
+      address: 192.168.253.1
+      mask: 255.255.255.0
+      vrf: global
 
 vrf:
   name: LAN_DATA
