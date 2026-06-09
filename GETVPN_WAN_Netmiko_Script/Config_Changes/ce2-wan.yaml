@@ -1,0 +1,28 @@
+---
+host: 192.168.254.2
+ip_address:
+  interfaces: 
+    - interface: GigabitEthernet0/1
+      description: LAN Interface
+      address: 10.150.1.2
+      mask: 255.255.255.0
+      vrf: LAN_DATA
+    - interface: Loopback30
+      description: Tunnel Source
+      address: 192.168.253.2
+      mask: 255.255.255.255
+      vrf: global
+
+vrf:
+  name: LAN_DATA
+  rd: 65000:200
+  rt_import: 65000:100
+  rt_export: 65000:100
+
+bgp:
+  as_number: 65000
+  vrf: LAN_DATA
+  neighbors:
+    - ip: 10.150.1.2
+      remote_as: 64999
+      

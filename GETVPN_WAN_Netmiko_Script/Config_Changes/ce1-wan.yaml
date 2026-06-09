@@ -10,7 +10,7 @@ ip_address:
     - interface: Loopback30
       description: Tunnel Source
       address: 192.168.253.1
-      mask: 255.255.255.0
+      mask: 255.255.255.255
       vrf: global
 
 vrf:
