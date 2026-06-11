@@ -23,6 +23,11 @@ class Router:
     def sendCommandSet(self,session, command_list):
         list_output = session.send_config_set(command_list)
         return list_output
-
+    
+    def openCommandFile(self, file):
+        with open(file,'r') as command_file:
+            command_list = command_file.readlines().strip()
+        return command_list
+    
 if __name__ == "__main___":
     print("This is a script for my Router class!")

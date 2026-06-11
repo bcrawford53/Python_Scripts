@@ -1,0 +1,24 @@
+vrf definition LAN_DATA
+rd 65000:200
+route-target both 65000:100
+address-family ipv4
+exit
+interface GigabitEthernet0/1
+description LAN interface
+vrf forwarding LAN_DATA
+ip address 10.150.1.2 255.255.255.0
+no shutdown
+exit
+interface Loopback 30
+description Tunnel source
+ip address 192.168.253.2 255.255.255.255
+exit
+router bgp 65000
+address-family ipv4 vrf LAN_DATA
+neighbor 10.150.1.1 remote-as 64999
+exit
+address-family vpnv4
+neighbor 192.168.254.5 remote-as 65000
+neighbor 192.168.254.5 activate
+end
+
