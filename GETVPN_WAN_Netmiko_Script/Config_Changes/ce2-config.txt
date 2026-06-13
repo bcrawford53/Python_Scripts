@@ -36,7 +36,6 @@ neighbor 192.168.254.5 activate
 neighbor 192.168.254.5 prefix-list Campus-Out out
 neighbor 192.168.254.5 prefix-list Campus-In in  
 exit
-exit
 crypto isakmp policy 100
 encr aes
 hash sha
@@ -45,9 +44,17 @@ group 5
 crypto isakmp key MY_LAB_PASSWD address 192.168.254.4 255.255.255.255
 crypto gdoi group VPN_GDOI_GRP
 identity number 65000
+identity address ipv4 192.168.254.4
+client registration interface Loopback 30
 server address ipv4 192.168.254.4
-source Loopback30
+crypto map VPN_GDOI_MAP 10 gdoi
+set group VPN_GDOI_GRP
 exit
-interface GigabitEthernet0/1
-crypto map VPN_GDOI_GRP
-end
+interface Tunnel0
+ip unnumbered Loopback30
+tunnel source Loopback30
+tunnel mode gre multipoint
+exit
+crypto map VPN_GDOI_MAP local-address Tunnel0
+interface Tunnel0
+crypto map VPN_GDOI_MAP
