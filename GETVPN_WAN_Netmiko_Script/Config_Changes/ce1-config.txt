@@ -35,5 +35,20 @@ neighbor 192.168.254.5 remote-as 65000
 neighbor 192.168.254.5 activate
 neighbor 192.168.254.5 prefix-list Campus-Out out
 neighbor 192.168.254.5 prefix-list Campus-In in  
+exit
+exit
+crypto isakmp policy 100
+encr aes
+hash sha
+authentication pre-share
+group 5
+crypto isakmp key MY_LAB_PASSWD address 192.168.254.4
+crypto gdoi group VPN_GDOI_GRP
+identity number 65000
+client registration local
+server address ipv4 192.168.254.4
+interface GigabitEthernet0/1
+crypto map VPN_GDOI_GRP
 end
+
 

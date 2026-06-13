@@ -1,0 +1,25 @@
+ip access-list extended VPN_ACL
+deny udp any eq 848 any eq 848
+deny tcp any any eq 22
+deny udp any eq 123 any eq 123
+permit ip any any
+exit
+crypto isakmp policy 100
+encr aes
+hash sha
+authentication pre-share
+group 5
+exit
+crypto isakmp key MY_LAB_PASSWD address 0.0.0.0
+crypto ipsec transform-set VPN_TRANSFORM-SET esp-aes esp-sha
+crypto ipsec profile VPN_TRANSFORM-SET
+set transform-set VPN_TRANSFORM-SET
+exit
+crypto gdoi group VPN_GDOI_GRP
+identity number 65000
+server local
+sa ipsec profile VPN_TRANSFORM-SET
+match address ipv4 VPN_ACL
+rekey transmit unicast
+rekey transport ipv4 
+end
