@@ -19,7 +19,8 @@ ip prefix-list ISP-IN permit 0.0.0.0/0
 ip prefix-list ISP-OUT permit 192.168.253.0/24 le 32
 ip prefix-list ISP-OUT permit 192.168.254.0/24 le 32
 ip prefix-list Campus-Out permit 10.200.0.0/16 le 32
-ip prefix-list Campus-In permit 10.0.0.0/8 le 32
+ip prefix-list Campus-In permitit 10.200.0.0/16 le 32
+ip prefix-list Campus-In permi 10.0.0.0/8 le 32
 router bgp 65000
 neighbor 192.168.254.5 remote-as 65000
 neighbor 192.168.254.5 update-source Loopback 254
@@ -31,7 +32,6 @@ address-family ipv4 vrf LAN_DATA
 neighbor 10.200.1.1 remote-as 64999
 exit-address-family
 address-family vpnv4
-neighbor 192.168.254.5 remote-as 65000
 neighbor 192.168.254.5 activate
 neighbor 192.168.254.5 prefix-list Campus-Out out
 neighbor 192.168.254.5 prefix-list Campus-In in  
@@ -42,11 +42,12 @@ encr aes
 hash sha
 authentication pre-share
 group 5
-crypto isakmp key MY_LAB_PASSWD address 192.168.254.4
+crypto isakmp key MY_LAB_PASSWD address 192.168.254.4 255.255.255.255
 crypto gdoi group VPN_GDOI_GRP
 identity number 65000
-client registration local
 server address ipv4 192.168.254.4
+source Loopback30
+exit
 interface GigabitEthernet0/1
 crypto map VPN_GDOI_GRP
 end

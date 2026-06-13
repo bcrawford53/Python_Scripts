@@ -16,12 +16,12 @@ class Router:
     
     #Netmiko method to send a command
     def sendCommand(self, session, command):
-        command_output = session.send_command(command)
+        command_output = session.send_command(command, read_timeout=120)
         return command_output
     
     #Method to send multiple commands, object will need to be a list
     def sendCommandSet(self,session, command_list):
-        list_output = session.send_config_set(command_list)
+        list_output = session.send_config_set(command_list, read_timeout=120)
         return list_output
     
     def openCommandFile(self, file):
