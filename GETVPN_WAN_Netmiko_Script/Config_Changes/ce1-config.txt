@@ -21,6 +21,8 @@ ip prefix-list ISP-OUT permit 192.168.254.0/24 le 32
 ip prefix-list Campus-Out permit 10.200.0.0/16 le 32
 ip prefix-list Campus-In permit 10.0.0.0/8 le 32
 router bgp 65000
+neighbor 192.168.254.5 remote-as 65000
+neighbor 192.168.254.5 update-source Loopback 254
 address-family ipv4
 neighbor 192.168.0.1 prefix-list ISP-IN in
 neighbor 192.168.0.1 prefix-list ISP-OUT out
