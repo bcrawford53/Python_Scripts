@@ -1,5 +1,4 @@
 import os
-import yaml
 from netmiko import ConnectHandler
 from rtr_class import Router
 
@@ -11,9 +10,9 @@ CUST_WAN_1 = Router(user="cisco", password="cisco", device_type="cisco_ios", hos
 CUST_WAN_2 = Router(user="cisco", password="cisco", device_type="cisco_ios", host=IP_LIST[1], secret="cisco")
 CUST_WAN_3 = Router(user="cisco", password="cisco", device_type="cisco_ios", host=IP_LIST[2], secret="cisco")
 
-WAN_1_COMM_LIST = CUST_WAN_1.openCommandFile('ce-1-wan-commands.txt')
-WAN_2_COMM_LIST = CUST_WAN_2.openCommandFile('ce-2-wan-commands.txt')
-WAN_3_COMM_LIST = CUST_WAN_3.openCommandFile('ce-3-wan-commands.txt')
+WAN_1_COMM_LIST = CUST_WAN_1.openCommandFile('ce1-config.txt')
+WAN_2_COMM_LIST = CUST_WAN_2.openCommandFile('ce2-config.txt')
+WAN_3_COMM_LIST = CUST_WAN_3.openCommandFile('ce3-config.txt')
 
 WAN_1_OUTPUT = CUST_WAN_1.sendCommandSet(CUST_WAN_1.connectToDevice(), WAN_1_COMM_LIST)
 WAN_2_OUTPUT = CUST_WAN_2.sendCommandSet(CUST_WAN_2.connectToDevice(), WAN_2_COMM_LIST)

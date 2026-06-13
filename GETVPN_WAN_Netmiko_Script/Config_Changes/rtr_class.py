@@ -26,7 +26,7 @@ class Router:
     
     def openCommandFile(self, file):
         with open(file,'r') as command_file:
-            command_list = command_file.readlines().strip()
+            command_list = command_file.readlines()
         return command_list
     
 if __name__ == "__main___":
