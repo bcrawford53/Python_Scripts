@@ -19,8 +19,8 @@ ip prefix-list ISP-IN permit 0.0.0.0/0
 ip prefix-list ISP-OUT permit 192.168.253.0/24 le 32
 ip prefix-list ISP-OUT permit 192.168.254.0/24 le 32
 ip prefix-list Campus-Out permit 10.200.0.0/16 le 32
-ip prefix-list Campus-In permitit 10.200.0.0/16 le 32
-ip prefix-list Campus-In permi 10.0.0.0/8 le 32
+ip prefix-list Campus-In permit 10.200.0.0/16 le 32
+ip prefix-list Campus-In permit 10.0.0.0/8 le 32
 router bgp 65000
 neighbor 192.168.254.5 remote-as 65000
 neighbor 192.168.254.5 update-source Loopback 254
@@ -50,11 +50,7 @@ server address ipv4 192.168.254.4
 crypto map VPN_GDOI_MAP 10 gdoi
 set group VPN_GDOI_GRP
 exit
-interface Tunnel0
-ip unnumbered Loopback30
-tunnel source Loopback30
-tunnel mode gre multipoint
-exit
-crypto map VPN_GDOI_MAP local-address Tunnel0
-interface Tunnel0
+crypto map VPN_GDOI_MAP local-address Loopback 30
+interface Gig0/0
 crypto map VPN_GDOI_MAP
+end

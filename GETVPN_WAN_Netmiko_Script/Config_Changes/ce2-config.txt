@@ -50,11 +50,7 @@ server address ipv4 192.168.254.4
 crypto map VPN_GDOI_MAP 10 gdoi
 set group VPN_GDOI_GRP
 exit
-interface Tunnel0
-ip unnumbered Loopback30
-tunnel source Loopback30
-tunnel mode gre multipoint
-exit
-crypto map VPN_GDOI_MAP local-address Tunnel0
-interface Tunnel0
+crypto map VPN_GDOI_MAP local-address Loopback 30
+interface Gig0/0
 crypto map VPN_GDOI_MAP
+end

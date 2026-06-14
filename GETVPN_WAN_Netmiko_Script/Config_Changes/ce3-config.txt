@@ -7,7 +7,7 @@ ip prefix-list ISP-IN permit 192.168.253.0/24 le 32
 ip prefix-list ISP-IN permit 0.0.0.0/0
 ip prefix-list ISP-OUT permit 192.168.253.0/24 le 32
 ip prefix-list ISP-OUT permit 192.168.254.0/24 le 32
-ip route 192.168.254.5 mask 255.255.255.255
+ip route 192.168.254.5 255.255.255.255 192.168.11.2
 router bgp 65000
 address-family ipv4
 network 192.168.254.5 mask 255.255.255.255
@@ -29,11 +29,7 @@ server address ipv4 192.168.254.4
 crypto map VPN_GDOI_MAP 10 gdoi
 set group VPN_GDOI_GRP
 exit
-interface Tunnel0
-ip unnumbered Loopback30
-tunnel source Loopback30
-tunnel mode gre multipoint
-exit
-crypto map VPN_GDOI_MAP local-address Tunnel0
-interface Tunnel0
+crypto map VPN_GDOI_MAP local-address Loopback 30
+interface Gig0/0
 crypto map VPN_GDOI_MAP
+end
