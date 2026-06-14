@@ -13,14 +13,15 @@ exit
 crypto key generate rsa general-keys label kskeys modulus 2048
 crypto isakmp key MY_LAB_PASSWD address 0.0.0.0
 crypto ipsec transform-set VPN_TRANSFORM-SET esp-aes esp-sha-hmac
+mode transport
 exit
 crypto ipsec profile GETVPN_PROFILE
 set transform-set VPN_TRANSFORM-SET
 exit
 crypto gdoi group VPN_GDOI_GRP
 identity number 65000
-identity address ipv4 192.168.254.4
 server local
+gdoi
 address ipv4 192.168.254.4
 rekey authentication mypubkey rsa kskeys
 rekey transport unicast
