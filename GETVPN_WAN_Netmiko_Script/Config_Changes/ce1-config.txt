@@ -44,8 +44,8 @@ group 5
 crypto isakmp key MY_LAB_PASSWD address 192.168.254.4 255.255.255.255
 crypto gdoi group VPN_GDOI_GRP
 identity number 65000
-identity address ipv4 192.168.254.4
-client registration interface Loopback 30
+identity address ipv4 192.168.254.4 #remove this line
+client registration interface Loopback 30 #remove this line
 server address ipv4 192.168.254.4
 crypto map VPN_GDOI_MAP 10 gdoi
 set group VPN_GDOI_GRP
