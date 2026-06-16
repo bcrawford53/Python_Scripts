@@ -7,8 +7,10 @@ charset-normalizer==3.4.7
 cryptography==47.0.0
 future==1.0.0
 idna==3.15
+lxml==6.1.1
 markdown-it-py==3.0.0
 mdurl==0.1.2
+ncclient==0.7.1
 netmiko==4.4.0
 ntc-templates==7.9.0
 paramiko==3.5.1
