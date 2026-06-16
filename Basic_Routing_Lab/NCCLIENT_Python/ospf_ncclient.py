@@ -1,5 +1,6 @@
 from ncclient import manager
 from ncclient.operations import RPCError
+from xml.dom import minidom
 
 try:
     with manager.connect(host="192.168.99.128", port=830, username="cisco", password="cisco",
@@ -7,7 +8,11 @@ try:
         print("Connected to device")
         running_config = m.get_config(source="running")
         print(running_config.xml)
-        
+        xml_string = running_config.xml
+
+        pretty_xml = minidom.parseString(xml_string).toprettyxml(indent="    ")
+
+        print(pretty_xml)
 
 except RPCError as rpc_error:
     print(f"RPC Error: {rpc_error}")
