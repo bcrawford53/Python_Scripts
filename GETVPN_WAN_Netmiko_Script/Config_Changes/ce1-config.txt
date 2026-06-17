@@ -3,6 +3,13 @@ rd 65000:200
 route-target both 65000:100
 address-family ipv4
 exit
+l3vpn encapulation ip ENCAP-PRO
+transport ipv4 source Loopback 30
+protocol gre
+mpls mtu max
+route-map ENCAP permit 5
+match ip address Campus-In
+set ip next-hop encapsulate l3vpn ENCAP-PRO
 interface GigabitEthernet0/1
 description LAN interface
 vrf forwarding LAN_DATA
@@ -34,7 +41,7 @@ exit-address-family
 address-family vpnv4
 neighbor 192.168.254.5 activate
 neighbor 192.168.254.5 prefix-list Campus-Out out
-neighbor 192.168.254.5 prefix-list Campus-In in  
+neighbor 192.168.254.5 route-map ENCAP in  
 exit
 crypto isakmp policy 100
 encr aes
