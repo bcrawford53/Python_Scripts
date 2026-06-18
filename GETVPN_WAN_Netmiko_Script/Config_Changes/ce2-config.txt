@@ -1,7 +1,23 @@
+ip prefix-list ISP-IN permit 192.168.254.0/24 le 32
+ip prefix-list ISP-IN permit 192.168.253.0/24 le 32
+ip prefix-list ISP-IN permit 0.0.0.0/0
+ip prefix-list ISP-OUT permit 192.168.253.0/24 le 32
+ip prefix-list ISP-OUT permit 192.168.254.0/24 le 32
+ip prefix-list Campus-Out permit 10.150.0.0/16 le 32
+ip prefix-list Campus-In permit 10.0.0.0/8 le 32
 vrf definition LAN_DATA
 rd 65000:200
 route-target both 65000:100
 address-family ipv4
+exit
+exit
+l3vpn encapsulation ip ENCAP
+transport ipv4 source Loopback 30
+protocol gre
+mpls mtu max
+route-map ENCAP permit 5
+match ip address Campus-In
+set ip next-hop encapsulate l3vpn ENCAP
 exit
 interface GigabitEthernet0/1
 description LAN interface
@@ -13,17 +29,11 @@ interface Loopback 30
 description Tunnel source
 ip address 192.168.253.2 255.255.255.255
 exit
-ip prefix-list ISP-IN permit 192.168.254.0/24 le 32
-ip prefix-list ISP-IN permit 192.168.253.0/24 le 32
-ip prefix-list ISP-IN permit 0.0.0.0/0
-ip prefix-list ISP-OUT permit 192.168.253.0/24 le 32
-ip prefix-list ISP-OUT permit 192.168.254.0/24 le 32
-ip prefix-list Campus-Out permit 10.150.0.0/16 le 32
-ip prefix-list Campus-In permit 10.0.0.0/8 le 32
 router bgp 65000
 neighbor 192.168.254.5 remote-as 65000
 neighbor 192.168.254.5 update-source Loopback 254
 address-family ipv4
+network 192.168.253.2 mask 255.255.255.255
 neighbor 192.168.1.1 prefix-list ISP-IN in 
 neighbor 192.168.1.1 prefix-list ISP-OUT out
 exit-address-family
@@ -34,14 +44,20 @@ address-family vpnv4
 neighbor 192.168.254.5 remote-as 65000
 neighbor 192.168.254.5 activate
 neighbor 192.168.254.5 prefix-list Campus-Out out
-neighbor 192.168.254.5 prefix-list Campus-In in  
+neighbor 192.168.254.5 route-map ENCAP in  
 exit
-crypto isakmp policy 100
-encr aes
-hash sha
-authentication pre-share
-group 5
-crypto isakmp key MY_LAB_PASSWD address 192.168.254.4 255.255.255.255
+crypto ikev2 proposal GET-IKEv2-PROP
+encryption aes-cbc-256
+integrity sha512
+group 20
+crypto ikev2 policy GET-IKEv2-Policy
+proposal GET-IKEv2-PROP
+crypto ikev2 profile GETVPN-IKEv2-PROFILE
+match identity remote address 192.168.254.4 255.255.255.255
+identity local address 192.168.253.2
+authentication remote pre-share key cisco123
+authentication local pre-share key cisco123
+exit
 crypto gdoi group VPN_GDOI_GRP
 identity number 65000
 server address ipv4 192.168.254.4

@@ -11,14 +11,13 @@ group 20
 crypto ikev2 policy GET-IKEv2-Policy
 proposal GET-IKEv2-PROP
 crypto ikev2 profile GETVPN-IKEv2-PROFILE
-match identity remote address 192.168.254.0 255.255.255.0
-identity local address 192.168.254.5
-authentication remote pre-share key xxxxxxx
-authentication local pre-share key xxxxxxxx
+match identity remote address 192.168.253.0 255.255.255.0
+identity local address 192.168.254.4
+authentication remote pre-share key cisco123
+authentication local pre-share key cisco123
 exit
 crypto key generate rsa general-keys label kskeys modulus 2048
-crypto isakmp key MY_LAB_PASSWD address 0.0.0.0
-crypto ipsec transform-set VPN_TRANSFORM-SET esp-aes 256 esp-sha-hmac
+crypto ipsec transform-set VPN_TRANSFORM-SET esp-aes 256 esp-sha512-hmac
 mode tunnel
 exit
 crypto ipsec profile GETVPN_PROFILE
