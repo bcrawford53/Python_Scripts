@@ -1,46 +1,34 @@
-ip access-list extended VPN_ACL
-deny udp any eq 848 any eq 848
-deny tcp any any eq 22
-deny udp any eq 123 any eq 123
-permit ip any any
-exit
-ip access-list extended PERMIT_GETVPN
-permit gre 192.168.253.0 0.0.0.255 192.168.253.0 0.0.0.255
-exit
-ip access-list standard GETVPN_AUTHORIZATION
-permit 192.168.253.0 0.0.0.255
-exit
-crypto ikev2 proposal GET-IKEv2-PROP
-encryption aes-cbc-256
-integrity sha512
-group 20
-crypto ikev2 policy GET-IKEv2-Policy
-proposal GET-IKEv2-PROP
-crypto ikev2 profile GETVPN-IKEv2-PROFILE
-match identity remote address 192.168.253.0 255.255.255.0
-identity local address 192.168.254.4
-authentication remote pre-share key cisco123
-authentication local pre-share key cisco123
+ip access-list extended GETVPN-NETWORKS
+permit ip 10.0.0.0 0.255.255.255 10.0.0.0 0.255.255.255
 exit
 crypto key generate rsa general-keys label kskeys modulus 2048
-crypto ipsec transform-set VPN_TRANSFORM-SET esp-aes 256 esp-sha512-hmac
+crypto isakmp policy 10
+encr aes 256
+authentication pre-share
+group 20
+crypto isakmp key cisco123 address 0.0.0.0
+crypto ipsec transform-set GETVPN_IPSEC_TS esp-aes 256 esp-sha256-hmac
 mode tunnel
 exit
-crypto isakmp key cisco123 address 192.168.253.0 255.255.255.0
-crypto ipsec profile GETVPN_PROFILE
-set transform-set VPN_TRANSFORM-SET
+crypto isakmp key cisco123 address 0.0.0.0
+crypto ipsec profile GETVPN_IPSEC_PF
+set transform-set GETVPN_IPSEC_TS
 exit
 crypto gdoi group VPN_GDOI_GRP
 identity number 65000
 server local
-gikev2 GETVPN-IKEv2-PROFILE
-address ipv4 192.168.254.4
 rekey authentication mypubkey rsa kskeys
 rekey transport unicast
-rekey retransmit 10 number 2
-rekey lifetime seconds 86400
-authorization address ipv4 GETVPN_AUTHORIZATION
+rekey address ipv4 192.168.254.4
+rekey retransmit 10 number 3
+address ipv4 192.168.254.4
 sa ipsec 1
-profile GETVPN_PROFILE
-match address ipv4 PERMIT_GETVPN
+profile GETVPN_IPSEC_PF
+match address ipv4 GETVPN-NETWORKS
+exit
+crypto map GETVPN_MAP 10 gdoi
+set group VPN_GDOI_GRP
+exit
+interface Gig0/1
+crypto map GETVPN_MAP
 end

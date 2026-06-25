@@ -46,24 +46,20 @@ neighbor 192.168.254.5 activate
 neighbor 192.168.254.5 prefix-list Campus-Out out
 neighbor 192.168.254.5 route-map ENCAP in  
 exit
-crypto ikev2 proposal GET-IKEv2-PROP
-encryption aes-cbc-256
-integrity sha512
+crypto isakmp policy 10
+encr aes 256
+authentication pre-share
 group 20
-crypto ikev2 policy GET-IKEv2-Policy
-proposal GET-IKEv2-PROP
-crypto ikev2 profile GETVPN-IKEv2-PROFILE
-match address local 192.168.253.1
+crypto isakmp key cisco123 address 0.0.0.0
+crypto ipsec transform-set GETVPN_IPSEC_TS esp-aes 256 esp-sha256-hmac
 exit
-crypto isakmp key cisco123 address 192.168.253.0 255.255.255.0
-crypto isakmp key cisco123 address 192.168.254.0 255.255.255.0
 crypto gdoi group VPN_GDOI_GRP
 identity number 65000
 server address ipv4 192.168.254.4
-crypto map VPN_GDOI_MAP 10 gdoi
+crypto map GETVPN_MAP 10 gdoi
 set group VPN_GDOI_GRP
 exit
-crypto map VPN_GDOI_MAP local-address Loopback 30
+crypto map GETVPN_MAP local-address Loopback 30
 interface Gig0/0
-crypto map VPN_GDOI_MAP
+crypto map GETVPN_MAP
 end
