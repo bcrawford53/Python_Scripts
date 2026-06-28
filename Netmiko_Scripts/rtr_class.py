@@ -1,0 +1,33 @@
+from netmiko import ConnectHandler
+
+class Router:
+    def __init__(self, user, password, device_type, secret, host):
+        self.device_dict = {"device_type": device_type,
+                            "host": host,
+                            "username": user,
+                            "password": password,
+                            "secret": secret }
+    
+    #Netmiko function to SSH to device
+    def connectToDevice(self):
+        session = ConnectHandler(**self.device_dict)
+        session.enable()
+        return session
+    
+    #Netmiko method to send a command
+    def sendCommand(self, session, command):
+        command_output = session.send_command(command, read_timeout=120)
+        return command_output
+    
+    #Method to send multiple commands, object will need to be a list
+    def sendCommandSet(self,session, command_list):
+        list_output = session.send_config_set(command_list, read_timeout=120)
+        return list_output
+    
+    def openCommandFile(self, file):
+        with open(file,'r') as command_file:
+            command_list = command_file.readlines()
+        return command_list
+    
+if __name__ == "__main___":
+    print("This is a script for my Router class!")

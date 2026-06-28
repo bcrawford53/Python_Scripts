@@ -1,6 +1,8 @@
+from nacl import encoding
 from ncclient import manager
 from ncclient.operations import RPCError
 from xml.dom import minidom
+import os
 
 try:
     with manager.connect(host="192.168.99.128", port=830, username="cisco", password="cisco",
@@ -13,6 +15,10 @@ try:
         pretty_xml = minidom.parseString(xml_string).toprettyxml(indent="    ")
 
         print(pretty_xml)
+
+        # Save the pretty XML to a file
+        with open("running_config.xml", "w",encoding='utf-8') as f:
+            f.write(pretty_xml)
 
 except RPCError as rpc_error:
     print(f"RPC Error: {rpc_error}")
