@@ -13,6 +13,12 @@ SWITCHES = {"SWITCH_A": {"ip":"192.168.99.155",
 
 SWITCH_SM_LAB = {"host": "INT_Switch", "ip": "192.168.10.1", "username": "cisco", "password": "cisco",
                   "vlans": [{"id":10,"name":"DATA"},{"id":20,"name":"VoIP"},{"id":30,"name":"MGMT"}],
+                  "routed-vlans": [{"vlan10": 
+                                    {"ip":"10.10.10.1", "mask":24} },
+                                    {"vlan20":
+                                     {"ip":"10.10.20.1", "mask":24}},
+                                     {"vlan30":
+                                      {"ip":"10.10.30.1", "mask":24}}],
                   "host_interfaces": [{"HOST_A": {"interface": "GigabitEthernet1/0/10", "vlan": 10}},
                                        {"HOST_B": {"interface": "GigabitEthernet1/0/11", "vlan": 20}
                                       }]
