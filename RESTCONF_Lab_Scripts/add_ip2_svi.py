@@ -19,23 +19,23 @@ headers = {
 
 url = (
     f"https://192.168.10.1/restconf/data/"
-    "openconfig-interfaces:interfaces"
+    "openconfig-interfaces:interfaces/interface=Vlan30/routed-vlan"
 )
 
 payload = {
-    "openconfig-interfaces:interfaces": {
-        "interface": [
-            {
-                "name": "Vlan30",
-                "config": {
-                    "name": "Vlan30",
-                    "type": "iana-if-type:l3ipvlan",
-                    "enabled": True
-                }
+  "openconfig-vlan:routed-vlan": {
+    "openconfig-if-ip:ipv4": {
+      "addresses": {
+        "address": [
+          {
+            "ip": "10.10.30.1",
+            "config": {
+              "ip": "10.10.30.1",
+              "prefix-length": 24
             }
+          }
         ]
-    }
-}
+      }}}}
 
 try:
     print(f"Creating SVI interface on device: {hostname}")
