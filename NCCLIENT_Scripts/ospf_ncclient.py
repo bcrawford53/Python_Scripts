@@ -5,8 +5,8 @@ from xml.dom import minidom
 import os
 
 try:
-    with manager.connect(host="192.168.99.128", port=830, username="cisco", password="cisco",
-                        timeout=30,device_params={'name':'iosxe'}, hostkey_verify=False) as m:
+    with manager.connect(host="192.168.99.129", port=830, username="cisco", password="cisco",
+                        timeout=30,device_params={'name':'csr'}, hostkey_verify=False) as m:
         print("Connected to device")
         running_config = m.get_config(source="running")
         print(running_config.xml)
