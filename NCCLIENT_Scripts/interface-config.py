@@ -32,7 +32,7 @@ for device in dev_list:
         with manager.connect(host=device, port=830, username=user, password=pwd, timeout=30, device_params={"name":"csr"}, hostkey_verify=False) as m:
             if device == "192.168.99.129":
                 print(f"Connecting to device: {device}\nAdding IP Address to G2:\n\n")
-                config_intf_filter = f"""<config>
+                config_intf_filter = f"""<config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
                     <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
                     <interface>
                     <GigabitEthernet>
@@ -50,10 +50,10 @@ for device in dev_list:
                         </native>
                         </config>
                         """
-                intf_config_output = m.edit_config(target="running", config=config_intf_filter)
+                intf_config_output = m.edit_config(target="candidate", config=config_intf_filter, error_option="rollback-on-error")
             else:
                 print(f"Connecting to device: {device}\nAdding IP Address to G2:\n\n")
-                config_intf_filter = f"""<config>
+                config_intf_filter = f"""<config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
                     <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
                     <interface>
                     <GigabitEthernet>
@@ -71,9 +71,9 @@ for device in dev_list:
                         </native>
                         </config>
                         """
-                intf_config_output = m.edit_config(target="running", config=config_intf_filter)
-
-
+                intf_config_output = m.edit_config(target="candidate", config=config_intf_filter, error_option="rollback-on-error")
+                
+            m.commit()
             print(f"Connecting to device: {device}\nGetting Interface Stats After Change")
             intf_config = m.get(filter=("subtree", get_intf_filter))
             #print the output
