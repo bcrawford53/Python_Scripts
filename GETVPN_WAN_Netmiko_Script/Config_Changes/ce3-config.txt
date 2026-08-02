@@ -24,13 +24,13 @@ exit-address-family
 exit
 crypto isakmp policy 10
 encr aes 256
+hash sha256
+lifetime 86400
 authentication pre-share
 group 20
 crypto isakmp key cisco123 address 0.0.0.0
-crypto ipsec transform-set GETVPN_IPSEC_TS esp-aes 256 esp-sha256-hmac
-exit
 crypto gdoi group VPN_GDOI_GRP
-identity number 65000
+identity number 600
 server address ipv4 192.168.254.4
 crypto map GETVPN_MAP 10 gdoi
 set group VPN_GDOI_GRP
