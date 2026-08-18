@@ -1,0 +1,21 @@
+---
+WAN-A:
+  hostname: 192.168.99.129
+  groups: [lab]
+  data:
+    site: "HQ"
+    role: "edge"
+
+WAN-B:
+  hostname: 192.168.99.130
+    groups: [lab]
+    data:
+      site: "HQ"
+      role: "edge"
+
+Int-Switch:
+  hostname: 192.168.10.1
+    groups: [lab]
+    data:
+      site: "HQ"
+      role: "switch"
